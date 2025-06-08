@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+
+// Note: the apiResource handles CRUD operations GET, POST, PUT, DELETE
+// So you don't need to define each route individually
 
 // Test Route
 Route::get('/hello', function () {
@@ -26,21 +30,4 @@ Route::get('/users', function () {
 });
 
 // Post routes
-// Get all posts
-Route::get('/posts', function () {
-    return response()->json([
-        ['id' => 1, 'title' => 'First Post', 'body' => 'This is the first post body', 'userId' => 1],
-        ['id' => 2, 'title' => 'Second Post', 'body' => 'Another post body', 'userId' => 2],
-        ['id' => 3, 'title' => 'Third Post', 'body' => 'More post content', 'userId' => 3],
-    ]);
-});
-
-// Get single post
-Route::get('/posts/{postId}', function ($postId) {
-    return response()->json([
-        'id' => $postId,
-        'title' => 'Sample Post Title',
-        'body' => 'This is a mock body for the post with ID ' . $postId,
-        'userId' => 1,
-    ]);
-});
+Route::apiResource('posts', PostController::class);
