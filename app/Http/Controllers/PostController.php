@@ -15,7 +15,7 @@ class PostController extends Controller
     }
 
     // Get post by id
-    public function show($id)
+    public function show(int $id)
     {
         $post = Post::find($id);
 
@@ -40,7 +40,7 @@ class PostController extends Controller
     }
 
     // Update a post
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $post = Post::find($id);
 

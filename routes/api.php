@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
@@ -11,14 +12,8 @@ Route::get('/hello', function () {
     return response()->json(['message' => 'Hello, World!']);
 });
 
-// Todos Routes
-Route::get('/todos', function () {
-    return response()->json([
-        ['id' => 1, 'title' => 'Learn Laravel', 'completed' => false],
-        ['id' => 2, 'title' => 'Connect Vue to API', 'completed' => true],
-        ['id' => 3, 'title' => 'Polish Dashboard UI', 'completed' => false],
-    ]);
-});
+// Todos Route
+Route::apiResource('todos', TodoController::class);
 
 // User routes
 Route::get('/users', function () {
