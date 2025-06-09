@@ -27,16 +27,14 @@ class TodoController extends Controller
     // Create a new todo
     public function store(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'completed' => 'required|boolean',
-            'user_id' => 'required|integer',
+        $data = $this->validate($request, [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'completed' => 'boolean',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $todo = Todo::create($data);
-
-        // dd($request->all());
 
         return response()->json($todo, 201);
     }
@@ -44,12 +42,16 @@ class TodoController extends Controller
     // Update a todo
     public function update(Request $request, int $id): JsonResponse
     {
-        $todo = Todo::find($id);
+        $data = $this->validate($request, [
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|nullable|string',
+            'completed' => 'sometimes|boolean',
+            'user_id' => 'sometimes|required|exists:users,id',
+        ]);
 
-        if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
-        }
-        $todo->update($request->only(['title', 'description', 'completed']));
+        $todo = Todo::findOrFail($id);
+        $todo->update($data);
+
         return response()->json($todo);
     }
 
@@ -57,9 +59,7 @@ class TodoController extends Controller
     {
         $todo = Todo::find($id);
 
-        if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
-        }
+        if (!$todo) return response()->json(['message' => 'Todo not found'], 404);
 
         $todo->delete();
 

@@ -27,9 +27,9 @@ class UserController extends Controller
     // Create new user
     public function store(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
+        $data = $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
         ]);
 

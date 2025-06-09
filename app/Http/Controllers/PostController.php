@@ -27,7 +27,7 @@ class PostController extends Controller
     // Create a new post
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $data = $this->validate($request, [
             'title' => 'required|string|max:255',
             'body' => 'required|string',
             'user_id' => 'required|integer',
@@ -41,13 +41,14 @@ class PostController extends Controller
     // Update a post
     public function update(Request $request, int $id)
     {
-        $post = Post::find($id);
+        $data = $this->validate($request, [
+            'title' => 'sometimes|required|string|max:255',
+            'body' => 'sometimes|required|string',
+            'user_id' => 'sometimes|required|exists:users,id',
+        ]);
 
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
-        }
-
-        $post->update($request->only(['title', 'body']));
+        $post = Post::findOrFail($id);
+        $post->update($data);
 
         return response()->json($post);
     }
@@ -57,9 +58,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
-        }
+        if (!$post) return response()->json(['message' => 'Post not found'], 404);
 
         $post->delete();
 
