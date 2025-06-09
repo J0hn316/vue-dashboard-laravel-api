@@ -18,10 +18,10 @@ class TodoController extends Controller
     public function show(int $id): JsonResponse
     {
         $todo = Todo::find($id);
-        if (!$todo) {
-            return response()->json(['message' => 'Todo not found'], 404);
-        }
-        return response()->json($todo);
+
+        return $todo
+            ? response()->json($todo)
+            : response()->json(['message' => 'Todo not found'], 404);
     }
 
     // Create a new todo

@@ -19,10 +19,9 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
-        }
-        return response()->json($post);
+        return $post
+            ? response()->json($post)
+            : response()->json(['message' => 'Post not found'], 404);
     }
 
     // Create a new post
