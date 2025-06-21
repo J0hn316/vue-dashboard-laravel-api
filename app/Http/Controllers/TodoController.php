@@ -27,12 +27,20 @@ class TodoController extends Controller
     // Create a new todo
     public function store(Request $request): JsonResponse
     {
+        // Get the authenticated user
+        $user = $request->user();
+
+        if (!$user) return response()->json(['message' => 'Unauthorized'], 401);
+
+        // Validate the incoming request (no need to include user_id here)
         $data = $this->validate($request, [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'completed' => 'boolean',
-            'user_id' => 'required|exists:users,id',
         ]);
+
+        // Attach the authenticated user's ID
+        $data['user_id'] = $user->id;
 
         $todo = Todo::create($data);
 
