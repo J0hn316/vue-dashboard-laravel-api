@@ -22,5 +22,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('todos', TodoController::class);
     Route::apiResource('users', UserController::class);
 });
-
-// Route::middleware('auth:sanctum')->post('/logout', [AuthenticatedSessionController::class, 'destroy']);
